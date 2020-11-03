@@ -18,6 +18,7 @@ int main() {
 	int i = 0;
 	int h = 1;
 	int res = 0;
+	int symbol;
 	int res1 = 0;
 	int count = 0;
 	char name[255];
@@ -59,36 +60,37 @@ int main() {
 						}
 				}
 			}
-		}
-		else if ((*item).d_type == DT_REG) {
-		int sum_simbol = strlen(item->d_name);
-		for (i = 0; i < sum_simbol; ++i) {
-			if (!(((item->d_name[i] >= 'A') && (item->d_name[i] <= 'Z'))
-				|| ((item->d_name[i] >= 'a') && (item->d_name[i] <= 'z')))) {
-				symbol++;
-				res1 = 1;
-			}
-		}
-		if ((res1 == 1) && (symbol >= 2)) {
-			if (unlink(item->d_name) == -1) {
-				perror("Error unlink file");
-				res = -1;
-			}
-		}
+			else if ((*item).d_type == DT_REG) {
+				int sum_simbol = strlen(item->d_name);
+				for (i = 0; i < sum_simbol; ++i) {
+					if (!(((item->d_name[i] >= 'A') && (item->d_name[i] <= 'Z'))
+						|| ((item->d_name[i] >= 'a') && (item->d_name[i] <= 'z')))) {
+						symbol++;
+						res1 = 1;
+					}
+				}
+				if ((res1 == 1) && (symbol >= 2)) {
+					if (unlink(item->d_name) == -1) {
+						perror("Error unlink file");
+						res = -1;
+					}
+				}
 
 			}
 			errno = 0;
-	}
-	if (errno != 0) {
-		perror("Проблема открытия каталога");
-		res = -1;
+		}
+		if (errno != 0) {
+			perror("Проблема открытия каталога");
+			res = -1;
+
+		}
 	}
 	closedir(p);
 	int status;
 	while (first != NULL) {
 		pid_t result_of_waitpid = waitpid(first->data, &status, 0);
 		g = first;
-		first = firts->next;
+		first = first->next;
 		free(g);
 		if (!WIFEXITED(status)) {
 			if (result_of_waitpid == -1) perror("Error of waitpid");
@@ -100,4 +102,5 @@ int main() {
 	}
 	return res;
 }
+
 
