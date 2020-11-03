@@ -42,8 +42,8 @@ int main() {
 							else
 								if (child_id == 0) {
 									printf("This is child process\n");
-										strcat(name1, "/");
-										strcat(name1, item->d_name);
+										//strcat(name1, "/");
+										//strcat(name1, item->d_name);
 										closedir(p);
 										p = opendir(way);
 										if (p == NULL) {
