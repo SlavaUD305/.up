@@ -77,27 +77,27 @@ int main() {
 				}
 
 			}
-			errno = 0;
 		}
+		errno = 0;
 		if (errno != 0) {
 			perror("Проблема открытия каталога");
 			res = -1;
 
 		}
-	}
-	closedir(p);
-	int status;
-	while (first != NULL) {
-		pid_t result_of_waitpid = waitpid(first->data, &status, 0);
-		g = first;
-		first = first->next;
-		free(g);
-		if (!WIFEXITED(status)) {
-			if (result_of_waitpid == -1) perror("Error of waitpid");
-			else
-				if (!WIFEXITED(status)) perror("Child process hasn't finished properly\n");
+		closedir(p);
+		int status;
+		while (first != NULL) {
+			pid_t result_of_waitpid = waitpid(first->data, &status, 0);
+			g = first;
+			first = first->next;
+			free(g);
+			if (!WIFEXITED(status)) {
+				if (result_of_waitpid == -1) perror("Error of waitpid");
 				else
-					printf("Child process has returned %d\n", WEXITSTATUS(status));
+					if (!WIFEXITED(status)) perror("Child process hasn't finished properly\n");
+					else
+						printf("Child process has returned %d\n", WEXITSTATUS(status));
+			}
 		}
 	}
 	return res;
