@@ -34,30 +34,32 @@ int main() {
 		struct dirent* item;
 		while ((item = readdir(p))) {
 			if ((*item).d_type == DT_DIR) {
-				if ((strcmp((*item).d_name, ".") != 0) || ((strcmp((*item).d_name, "..") != 0))) {
-					pid_t child_id = fork();
-					if (child_id == -1) perror("Error of creating\n");
-					else
-						if (child_id == 0) {
-							printf("This is child process\n");
-							strcat(name1, "/");
-							strcat(name1, item->d_name);
-							closedir(p);
-							p = opendir(name1);
-							if (p == NULL) {
-								perror("File openning error\n");
-								information = 1;
-							}
-						}
-						else {
-							printf("This is parent process");
-							g = malloc(sizeof(struct Titem));
-							if (g) {
-								g->data = child_id;
-								g->next = first;
-								first = g;
-							}
-						}
+				if ((strcmp((*item).d_name, ".") != 0) {
+					if ((strcmp((*item).d_name, "..") != 0)) {
+						pid_t child_id = fork();
+							if (child_id == -1) perror("Error of creating\n");
+							else
+								if (child_id == 0) {
+									printf("This is child process\n");
+										strcat(name1, "/");
+										strcat(name1, item->d_name);
+										closedir(p);
+										p = opendir(name1);
+										if (p == NULL) {
+											perror("File openning error\n");
+											information = 1;
+										}
+								}
+								else {
+									printf("This is parent process");
+									g = malloc(sizeof(struct Titem));
+									if (g) {
+										g->data = child_id;
+										g->next = first;
+										first = g;
+									}
+								}
+					}
 				}
 			}
 			else if ((*item).d_type == DT_REG) {
