@@ -24,8 +24,9 @@ int main() {
 	char name[255];
 	char name1[255] = "test";
 	char name2[255] = "";
+	char way[255] = "/home/slava/YP/pr5/test/"
 
-	DIR* p = opendir(name1);
+	DIR* p = opendir(way);
 	if (p == NULL) {
 		perror("Open dile\n");
 		information = 1;
@@ -34,8 +35,8 @@ int main() {
 		struct dirent* item;
 		while ((item = readdir(p))) {
 			if ((*item).d_type == DT_DIR) {
-				if ((strcmp((*item).d_name, ".") != 0) {
-					if ((strcmp((*item).d_name, "..") != 0)) {
+				if (strcmp((*item).d_name, ".") != 0) {
+					if (strcmp((*item).d_name, "..") != 0) {
 						pid_t child_id = fork();
 							if (child_id == -1) perror("Error of creating\n");
 							else
@@ -44,7 +45,7 @@ int main() {
 										strcat(name1, "/");
 										strcat(name1, item->d_name);
 										closedir(p);
-										p = opendir(name1);
+										p = opendir(way);
 										if (p == NULL) {
 											perror("File openning error\n");
 											information = 1;
